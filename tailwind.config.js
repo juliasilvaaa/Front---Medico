@@ -11,6 +11,9 @@ module.exports = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        'medico-padrao': 'var(--medico-padrao-branco-cis)'
+      }
     },
   },
   plugins: [],

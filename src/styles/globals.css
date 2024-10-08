@@ -5,6 +5,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --medico-padrao-branco-cis: url('../../public/img/medico.png');
+  --azulprincipal: #0174DE;
 }
 
 @media (prefers-color-scheme: dark) {
