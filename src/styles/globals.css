@@ -8,6 +8,7 @@
   --medico-padrao-branco-cis: url('../../public/img/medico.png');
   --azulprincipal: #0174DE;
   --azulescuro: #2954C7;
+  --cinza: #565454;
 }
 
 @media (prefers-color-scheme: dark) {

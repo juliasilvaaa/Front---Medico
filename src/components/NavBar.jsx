@@ -21,23 +21,24 @@ const NavBar = () => {
             {/* Logo Vital+ */}
             <div className="top-0 flex">
                 <img className="h-[10vh]" src="/img/logo.png" alt="Logo" />
-        
+
             </div>
 
-    
+
             <ul className="mt-[1px]" id="categoria">
                 {/* Links da NavBar */}
-
-                <NavBarCategory category={"/info-clinica"} images={agendaImg} title={"Cronograma"}  />
-                <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} /> 
+                <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} />
+                <NavBarCategory category={"/info-clinica"} images={agendaImg} title={"Cronograma"} />
                 <NavBarCategory category={"/notificacoes"} images={notificacoesImg} title={"Notificações"} />
-                <NavBarCategory category={"/notificacoes"} images={mensagensImg} title={"Mensagens"} />
+                <NavBarCategory category={"/"} images={mensagensImg} title={"Mensagens"} />
+                <NavBarCategory category={"/"} images={mensagensImg} title={"Perfil"} />
 
 
- 
 
-        
-               
+
+
+
+
             </ul>
         </div>
     );
