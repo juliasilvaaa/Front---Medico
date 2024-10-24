@@ -1,43 +1,71 @@
 // NavBar.js
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "../styles/globals.css";
 
 // Import das Imagens
-import agendaImg from "../../public/img/agenda.png"
+import agendaImg from "../../public/img/calendario.png"
 import inicioImg from "../../public/img/inicio.png"
 import notificacoesImg from "../../public/img/notificacoes.png"
-import mensagensImg from "../../public/img/mensagens.png"
+import ajustesImg from "../../public/img/ajustes.png"
 
-
-
-
+// Import do NavBar
 import NavBarCategory from './NavBarCategory';
 
-const NavBar = () => {
+const NavBar = ({ medicoId }) => {
+    const [medico, setMedico] = useState(null);
+
+    useEffect(() => {
+        const fetchMedico = async () => {
+            if (!medicoId) return;
+            try {
+                const response = await fetch(`http://localhost:8080/v1/vital/medico/${medicoId}`);
+                const data = await response.json();
+                if (data.medico && data.medico.length > 0) {
+                    setMedico(data.medico[0]) // Pega o médico
+                }
+
+            } catch (error) {
+                console.error('Erro ao buscar os dados do médico', error);
+            }
+        };
+        fetchMedico();
+    }, [medicoId]);
+
+
     return (
         <div className="bg-[--azulescuro] text-white w-64 min-h-screen flex flex-col py-6 px-4">
             {/* Logo Vital+ */}
-            <div className="top-0 flex">
-                <img className="h-[10vh]" src="/img/logo.png" alt="Logo" />
-
+            <div className="top-0 ">
+                <img className="h-[60px]" src="/img/logo.png" alt="Logo" />
             </div>
 
+            <div className="flex items-center justify-center mt-20">
 
-            <ul className="mt-[1px]" id="categoria">
+
+                {/* Foto de Perfil */}
+                <div className="relative h-perfilH w-perfilW">
+
+                    <img src={medico ? "/path/to/perfil.png" : "/path/to/default-profile.png"}
+                        alt="Perfil"
+                        className="relative z-10 mx-auto w-perfilW h-perfilH" />
+                </div>
+            </div>
+
+            
+            <h1 className="flex items-center justify-center font-poppins mt-4"> 
+                Olá, {medico ? `Dr. ${medico.nome_medico}` : 'Carregando...'}
+            </h1>
+
+
+
+            <ul className="mt-[8vh]" id="categoria">
                 {/* Links da NavBar */}
                 <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} />
-                <NavBarCategory category={"/info-clinica"} images={agendaImg} title={"Cronograma"} />
+                <NavBarCategory category={"/"} images={agendaImg} title={"Agenda"} />
                 <NavBarCategory category={"/notificacoes"} images={notificacoesImg} title={"Notificações"} />
-                <NavBarCategory category={"/"} images={mensagensImg} title={"Mensagens"} />
-                <NavBarCategory category={"/"} images={mensagensImg} title={"Perfil"} />
-
-
-
-
-
-
+                <NavBarCategory category={"/"} images={ajustesImg} title={"Ajustes"} />
 
             </ul>
         </div>

@@ -2,10 +2,24 @@
 
 import React, { useState } from 'react';
 import Modal from "@/components/Modal";
+import validarLogin from '@/js/login.js';
 
-export default function Login() {
+const Login = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
+
+
+  const handleEntrar = () => {
+    // Lógica de login
+    console.log('Email:', email);
+    console.log('Senha:', senha);
+  };
+
 
   return (
     // Imagem do Médico
@@ -19,14 +33,15 @@ export default function Login() {
         {/* Email */}
         <form className="w-[60vh]">
           <div className="mb-4 relative">
-            <label htmlFor="email" className="">Email</label>
+            <label htmlFor="email" id='email' className="">Email</label>
             <input
               type="email"
               id="email"
               name="email"
-              required
               className="border border-gray-300 rounded p-2 pl-10 pr-10 w-full"
               placeholder="Seu email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <img
               src="/img/iconemail.png"
@@ -37,14 +52,14 @@ export default function Login() {
 
           {/* Senha */}
           <div className="mb-4 relative">
-            <label htmlFor="password" className="">Senha</label>
+            <label htmlFor="senha" id='senha' className="">Senha</label>
             <input
               type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              required
+              id="senha"
               className="border border-gray-300 rounded p-2 pl-10 pr-10 w-full"
               placeholder="Sua senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
             />
             <img
               src="/img/ocultarsenha.png"
@@ -54,7 +69,12 @@ export default function Login() {
             />
           </div>
 
-          <button type="submit" className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full">Entrar</button>
+          <button
+          id='entrar'
+          onClick={handleEntrar}
+          className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full">
+            Entrar
+            </button>
         </form>
 
         {/* Linha para "Esqueceu sua senha?" e "Clique aqui" */}
@@ -69,4 +89,7 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;
+

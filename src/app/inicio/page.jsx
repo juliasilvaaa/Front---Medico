@@ -27,10 +27,7 @@ export default function Inicio() {
                 <h1 className="text-2xl font-bold text-[--font] p-10" >CONSULTAS</h1>
             </div>
 
-            {/* Div para exibir a galeria de vídeo */}
-            <div>
-                <h1  className="text-2xl font-bold text-[--font] p-10" >GALERIA</h1>
-            </div>
+           
 
 
                     {/* Aqui você pode adicionar mais conteúdo */}
