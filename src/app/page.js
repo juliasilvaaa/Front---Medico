@@ -2,46 +2,37 @@
 
 import React, { useState } from 'react';
 import Modal from "@/components/Modal";
-import validarLogin from '@/js/login.js';
+import validarLogin from '@/js/login.js'; 
 
 const Login = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [crm, setCrm] = useState(''); // Mudança para CRM
 
-
-
-  const handleEntrar = () => {
-    // Lógica de login
-    console.log('Email:', email);
-    console.log('Senha:', senha);
+  const handleEntrar = async (e) => {
+    e.preventDefault(); // Evita o comportamento padrão do form
+    await validarLogin(email, crm); // Chama a função de validação
   };
 
-
   return (
-    // Imagem do Médico
     <div className="flex h-screen">
       <div className="w-1/2 bg-cover bg-center bg-medico-padrao"></div>
 
-      {/* Div para textos, inputs e botões */}
       <div className="w-1/2 flex flex-col justify-center items-center p-8">
         <h1 className="text-3xl font-bold mb-4 text-[--azulprincipal] font-poppins">Login</h1>
 
-        {/* Email */}
-        <form className="w-[60vh]">
+        <form className="w-[60vh]" onSubmit={handleEntrar}>
           <div className="mb-4 relative">
-            <label htmlFor="email" id='email' className="">Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
-              name="email"
               className="border border-gray-300 rounded p-2 pl-10 pr-10 w-full"
               placeholder="Seu email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
             <img
               src="/img/iconemail.png"
@@ -50,34 +41,27 @@ const Login = () => {
             />
           </div>
 
-          {/* Senha */}
           <div className="mb-4 relative">
-            <label htmlFor="senha" id='senha' className="">Senha</label>
+            <label htmlFor="crm">CRM</label>
             <input
-              type={showPassword ? "text" : "password"}
-              id="senha"
+              type="text"
+              id="crm"
               className="border border-gray-300 rounded p-2 pl-10 pr-10 w-full"
-              placeholder="Sua senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-            <img
-              src="/img/ocultarsenha.png"
-              alt="Ícone de cadeado"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
+              placeholder="Seu CRM"
+              value={crm}
+              onChange={(e) => setCrm(e.target.value)}
+              required
             />
           </div>
 
           <button
-          id='entrar'
-          onClick={handleEntrar}
-          className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full">
+            id='entrar'
+            type="submit"
+            className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full">
             Entrar
-            </button>
+          </button>
         </form>
 
-        {/* Linha para "Esqueceu sua senha?" e "Clique aqui" */}
         <div className="flex items-center mt-4">
           <p className="text-gray-700">Esqueceu sua senha?</p>
           <button onClick={() => setOpenModal(true)} className="ml-2 text-blue-500 font-bold">
@@ -92,4 +76,3 @@ const Login = () => {
 };
 
 export default Login;
-

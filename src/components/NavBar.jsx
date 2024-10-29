@@ -66,7 +66,7 @@ const NavBar = ({ medicoId }) => {
         <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} />
     </li>
     <li className="mb-6"> {/* Adicionando margem inferior */}
-        <NavBarCategory category={"/"} images={agendaImg} title={"Agenda"} />
+        <NavBarCategory category={"/consultas"} images={agendaImg} title={"Agenda"} />
     </li>
     <li className="mb-6"> {/* Adicionando margem inferior */}
         <NavBarCategory category={"/notificacoes"} images={notificacoesImg} title={"Notificações"} />
