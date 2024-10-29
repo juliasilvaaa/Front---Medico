@@ -5,7 +5,7 @@ const NavBarLayout = ({children}) => {
         <div className="flex">
             <NavBar></NavBar>
             {/* <Header /> */}
-            <main>
+            <main className="w-full">
                 {children}
             </main>
         </div>

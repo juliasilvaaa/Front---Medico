@@ -1,4 +1,5 @@
-// NavBar.js
+"use client"; // This line marks the component as a Client Component
+
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -6,7 +7,7 @@ import "../styles/globals.css";
 
 // Import das Imagens
 import agendaImg from "../../public/img/calendario.png"
-import inicioImg from "../../public/img/inicio.png"
+import inicioImg from "../../public/img/inicio-casa.png"
 import notificacoesImg from "../../public/img/notificacoes.png"
 import ajustesImg from "../../public/img/ajustes.png"
 
@@ -59,15 +60,21 @@ const NavBar = ({ medicoId }) => {
             </h1>
 
 
-
             <ul className="mt-[8vh]" id="categoria">
-                {/* Links da NavBar */}
-                <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} />
-                <NavBarCategory category={"/"} images={agendaImg} title={"Agenda"} />
-                <NavBarCategory category={"/notificacoes"} images={notificacoesImg} title={"Notificações"} />
-                <NavBarCategory category={"/"} images={ajustesImg} title={"Ajustes"} />
-
-            </ul>
+    {/* Links da NavBar */}
+    <li className="mb-6"> {/* Adicionando margem inferior */}
+        <NavBarCategory category={"/inicio"} images={inicioImg} title={"Ínicio"} />
+    </li>
+    <li className="mb-6"> {/* Adicionando margem inferior */}
+        <NavBarCategory category={"/"} images={agendaImg} title={"Agenda"} />
+    </li>
+    <li className="mb-6"> {/* Adicionando margem inferior */}
+        <NavBarCategory category={"/notificacoes"} images={notificacoesImg} title={"Notificações"} />
+    </li>
+    <li className="mb-6"> {/* Adicionando margem inferior */}
+        <NavBarCategory category={"/"} images={ajustesImg} title={"Ajustes"} />
+    </li>
+</ul>
         </div>
     );
 };

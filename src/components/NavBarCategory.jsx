@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation'
 export default function NavBarCategory({ category, images, title }) {
     const actualPage = () => {
         
-        let linkClass = 'flex items-center gap-4';
+        let linkClass = 'flex items-center gap-4 font-bold font-poppins';
         const pathname = usePathname();
         if (pathname == category) {
             linkClass += ' text-white bg-[--fundodestaque] rounded-xl';

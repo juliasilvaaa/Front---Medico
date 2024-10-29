@@ -7,9 +7,11 @@
   --foreground: #171717;
   --medico-padrao-branco-cis: url('../../public/img/medico.png');
   --azulprincipal: #0174DE;
+  --azulclaro: #92BFF0;
   --azulescuro: #2954C7;
   --cinza: #565454;
   --fundodestaque: #7B9EE4;
+  --texto: #040F5D;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,5 +30,8 @@ body {
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .bg-gradient-custom {
+    background: linear-gradient(to bottom, #0174DE, #92BFF0);
   }
 }
