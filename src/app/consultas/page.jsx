@@ -1,4 +1,4 @@
-"use client"; // Marca o componente como Client Component
+"use client"; 
 
 import NavBarLayout from "@/components/layout/NavBarLayout";
 import { useEffect, useState } from "react"; 
@@ -14,19 +14,25 @@ const ConsultaDiaria = () => {
 
     useEffect(() => {
         const fetchConsultas = async () => {
+            const medicoId = localStorage.getItem('id_medico'); // Obtém o ID do médico do localStorage
+            if (!medicoId) {
+                console.error('ID do médico não encontrado.');
+                return;
+            }
+    
             try {
-                const response = await fetch('https://vital-umqy.onrender.com/v1/vital/consulta'); // URL da sua API
+                const response = await fetch(`https://vital-umqy.onrender.com/v1/vital/consulta?medicoId=${medicoId}`); // Adiciona o ID do médico na URL da API
                 const data = await response.json();
-
+    
                 // Processa as consultas para agrupar por data e por mês
                 const consultasMap = {};
                 const consultasMesMap = {};
-
+    
                 data.consultas.forEach(consulta => {
                     const dataConsulta = new Date(consulta.dias_consulta);
                     const dataStr = dataConsulta.toISOString().split('T')[0]; // Formata a data
                     const mesStr = `${dataConsulta.getFullYear()}-${dataConsulta.getMonth() + 1}`; // Chave do mês
-
+    
                     // Agrupamento por data
                     if (!consultasMap[dataStr]) {
                         consultasMap[dataStr] = [];
@@ -39,23 +45,24 @@ const ConsultaDiaria = () => {
                         paciente: consulta.nome_medico,
                         especialidade: consulta.nome_especialidade,
                     });
-
+    
                     // Agrupamento por mês
                     if (!consultasMesMap[mesStr]) {
                         consultasMesMap[mesStr] = [];
                     }
                     consultasMesMap[mesStr].push(consulta);
                 });
-
+    
                 setConsultasPorData(consultasMap);
                 setConsultasPorMes(consultasMesMap);
             } catch (error) {
                 console.error('Erro ao buscar as consultas:', error);
             }
         };
-
+    
         fetchConsultas();
     }, []);
+    
 
     const renderCalendario = () => {
         const firstDayOfMonth = new Date(anoAtual, mesAtual, 1);
