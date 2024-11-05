@@ -14,23 +14,29 @@ const ConsultaDiaria = () => {
 
     useEffect(() => {
         const fetchConsultas = async () => {
-            const medicoId = localStorage.getItem('id_medico'); // Obtém o ID do médico do localStorage
+            const medicoId = localStorage.getItem('idC'); // Obtém o ID do médico do localStorage
             if (!medicoId) {
                 console.error('ID do médico não encontrado.');
                 return;
             }
     
             try {
-                const response = await fetch(`https://vital-umqy.onrender.com/v1/vital/consulta?medicoId=${medicoId}`); // Adiciona o ID do médico na URL da API
+                const response = await fetch(`https://vital-umqy.onrender.com/v1/vital/consulta/${medicoId}`);
                 const data = await response.json();
+    
+                // Verifica se 'data.medico' existe e é um array
+                if (!data.medico || !Array.isArray(data.medico)) {
+                    console.error('A resposta não contém um array "medico".', data);
+                    return;
+                }
     
                 // Processa as consultas para agrupar por data e por mês
                 const consultasMap = {};
                 const consultasMesMap = {};
     
-                data.consultas.forEach(consulta => {
+                data.medico.forEach(consulta => {
                     const dataConsulta = new Date(consulta.dias_consulta);
-                    const dataStr = dataConsulta.toISOString().split('T')[0]; // Formata a data
+                    const dataStr = dataConsulta.toLocaleDateString('pt-BR'); // Formata a data para o horário local
                     const mesStr = `${dataConsulta.getFullYear()}-${dataConsulta.getMonth() + 1}`; // Chave do mês
     
                     // Agrupamento por data
@@ -63,39 +69,35 @@ const ConsultaDiaria = () => {
         fetchConsultas();
     }, []);
     
-
     const renderCalendario = () => {
         const firstDayOfMonth = new Date(anoAtual, mesAtual, 1);
         const lastDayOfMonth = new Date(anoAtual, mesAtual + 1, 0);
         const diasNoMes = lastDayOfMonth.getDate();
-        const primeiroDiaSemana = firstDayOfMonth.getDay(); // 0 (domingo) a 6 (sábado)
-
+        const primeiroDiaSemana = firstDayOfMonth.getDay();
+    
         const dias = [];
-        // Adiciona espaços vazios antes do primeiro dia do mês
         for (let i = 0; i < primeiroDiaSemana; i++) {
-            dias.push(<div key={`empty-${i}`} className="w-16 h-16"></div>); // Espaços vazios
+            dias.push(<div key={`empty-${i}`} className="w-16 h-16"></div>);
         }
-        // Adiciona os dias do mês
         for (let day = 1; day <= diasNoMes; day++) {
-            const diaAtual = new Date(anoAtual, mesAtual, day);
-            const dateKey = diaAtual.toISOString().split('T')[0];
+            const diaAtual = new Date(anoAtual, mesAtual, day); // Alterado para horário local
+            const dateKey = diaAtual.toLocaleDateString('pt-BR'); // Ajuste para usar horário local
             const quantidadeConsultas = consultasPorData[dateKey] ? consultasPorData[dateKey].length : 0;
-
+    
             dias.push(
                 <div
                     key={day}
                     onClick={() => setDataSelecionada(diaAtual)}
-                    className="flex flex-col items-center justify-center border rounded-lg w-24 h-16 m-1 cursor-pointer hover:bg-gray-200 transition"
+                    className="flex flex-col items-center justify-center border rounded-lg w-24 h-20 m-1 cursor-pointer hover:bg-gray-200 transition"
                 >
                     <span className="font-semibold">{day}</span>
                     <span className="text-gray-600">{quantidadeConsultas} {quantidadeConsultas === 1 ? 'consulta' : 'consultas'}</span>
                 </div>
             );
         }
-
+    
         return (
-            <div className="grid grid-cols-7">
-                {/* Nomes dos dias da semana */}
+            <div className="grid grid-cols-7 ">
                 <div className="font-bold text-center">Dom</div>
                 <div className="font-bold text-center">Seg</div>
                 <div className="font-bold text-center">Ter</div>
@@ -126,8 +128,10 @@ const ConsultaDiaria = () => {
         }
     };
 
+
+
     const handleIniciar = (idConsulta) => {
-        router.push(`/videochamada/${idConsulta}`); // Direciona para a tela de videochamada
+        router.push(`/videochamada/${idConsulta}`); // Direciona para a tela de videochamada passando o ID da consulta
     };
 
     // Agrupamento das consultas por mês para exibição
@@ -135,9 +139,9 @@ const ConsultaDiaria = () => {
 
     return (
         <NavBarLayout>
-            <div className="flex p-4 space-x-4">
+            <div className="flex p-4 space-x-10 items-center justify-center">
                 {/* Card do Calendário */}
-                <div className="bg-white shadow-md rounded-lg p-4 w-[40vh]">
+                <div className="bg-white shadow-md rounded-lg p-4 w-[100vh]">
                     {/* Controles de mês */}
                     <div className="flex items-center mb-4 justify-between">
                         <button onClick={handlePreviousMonth} className="bg-gray-200 p-1 rounded">
@@ -157,14 +161,16 @@ const ConsultaDiaria = () => {
                 {/* Card de Consultas do Dia Selecionado */}
                 <div className="bg-white shadow-md rounded-lg p-4 w-[40vh]">
                     <h2 className="text-md font-semibold mb-2">Consultas em {dataSelecionada.toLocaleDateString()}:</h2>
-                    {consultasPorData[dataSelecionada.toISOString().split('T')[0]] ? (
-                        consultasPorData[dataSelecionada.toISOString().split('T')[0]].map((consulta) => (
+                    {consultasPorData[dataSelecionada.toLocaleDateString('pt-BR')] ? (
+                        consultasPorData[dataSelecionada.toLocaleDateString('pt-BR')].map((consulta) => (
                             <div key={consulta.id} className="border rounded-lg p-2 mb-2 w-64">
                                 <p className="text-sm"><strong>Detalhes:</strong> {consulta.descricao}</p>
                                 <p className="text-sm"><strong>Data:</strong> {new Date(consulta.data).toLocaleDateString()}</p>
                                 <p className="text-sm"><strong>Hora:</strong> {new Date(consulta.hora).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                 <p className="text-sm"><strong>Médico:</strong> {consulta.paciente}</p>
                                 <p className="text-sm"><strong>Especialidade:</strong> {consulta.especialidade}</p>
+                               
+                               {/* Botao para iniciar a consulta de video  */}
                                 <button 
                                     onClick={() => handleIniciar(consulta.id)} 
                                     className="mt-2 bg-blue-500 text-white rounded px-2 py-1 text-sm"
@@ -174,8 +180,7 @@ const ConsultaDiaria = () => {
                             </div>
                         ))
                     ) : (
-                        
-                        <p>Julia pinto mil grau.</p>
+                        <p>Não há consultas agendadas</p>
                     )}
                 </div>
             </div>
@@ -191,16 +196,10 @@ const ConsultaDiaria = () => {
                             <p className="text-sm"><strong>Hora:</strong> {new Date(consulta.horas_consulta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                             <p className="text-sm"><strong>Médico:</strong> {consulta.nome_medico}</p>
                             <p className="text-sm"><strong>Especialidade:</strong> {consulta.nome_especialidade}</p>
-                            <button 
-                                onClick={() => handleIniciar(consulta.id_consulta)} 
-                                className="mt-2 bg-blue-500 text-white rounded px-2 py-1 text-sm"
-                            >
-                                Iniciar
-                            </button>
                         </div>
                     ))
                 ) : (
-                    <p>Nenhuma consulta agendada neste mês.</p>
+                    <p>Não há consultas para este mês.</p>
                 )}
             </div>
         </NavBarLayout>

@@ -1,4 +1,7 @@
-import NavBar from "../NavBar"
+"use client";
+
+
+import NavBar from "../NavBar";
 
 const NavBarLayout = ({children}) => {
     return(

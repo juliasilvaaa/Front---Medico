@@ -2,39 +2,38 @@
 
 import React, { useState } from 'react';
 import Modal from "@/components/Modal";
-import validarLogin from '@/js/login.js'; 
+import validarLogin from '@/js/login.js';
 
 const Login = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [senha, setSenha] = useState('');
   const [crm, setCrm] = useState('');
   const [error, setError] = useState(null);
   const [isCrmInvalid, setIsCrmInvalid] = useState(false);
   const [isSenhaInvalid, setIsSenhaInvalid] = useState(false);
 
- 
-const handleEntrar = async (e) => {
-  e.preventDefault();
-  setError(null);
-  setIsCrmInvalid(false);
-  setIsSenhaInvalid(false);
+  const handleEntrar = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setIsCrmInvalid(false);
+    setIsSenhaInvalid(false);
 
-  try {
-    const result = await validarLogin(crm, senha);
+    try {
+      const result = await validarLogin(crm, senha);
 
-    if (!result.success) {
-      setError(result.message);
-      if (result.message.includes('CRM')) setIsCrmInvalid(true);
-      if (result.message.includes('senha')) setIsSenhaInvalid(true);
-    } else {
-      window.location.href = '/inicio'; // Redirecionamento para a página inicial
+      if (!result.success) {
+        setError(result.message);
+        if (result.message.includes('CRM')) setIsCrmInvalid(true);
+        if (result.message.includes('senha')) setIsSenhaInvalid(true);
+      } else {
+        window.location.href = '/inicio'; // Redirecionamento para a página inicial
+      }
+    } catch (error) {
+      console.error("Erro ao realizar o login", error);
+      setError("Erro ao conectar com o servidor.");
     }
-  } catch (error) {
-    console.error("Erro ao realizar o login", error);
-    setError("Erro ao conectar com o servidor.");
-  }
-};
+  };
+
   return (
     <div className="flex h-screen">
       <div className="w-1/2 bg-cover bg-center bg-medico-padrao"></div>
@@ -73,7 +72,8 @@ const handleEntrar = async (e) => {
           <button
             id='entrar'
             type="submit"
-            className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full">
+            className="bg-[--azulprincipal] text-white rounded-lg p-2 w-full"
+          >
             Entrar
           </button>
         </form>
